@@ -28,8 +28,6 @@ const OrderScreen = () => {
   const [deliverOrder, { isLoading: loadingDeliver }] =
     useDeliverOrderMutation();
 
-  const { userInfo } = useSelector((state) => state.auth);
-
   const [{ isPending }, paypalDispatch] = usePayPalScriptReducer();
 
   const {
@@ -37,6 +35,8 @@ const OrderScreen = () => {
     isLoading: loadingPayPal,
     error: errorPayPal,
   } = useGetPayPalClientIdQuery();
+
+  const { userInfo } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
@@ -96,9 +96,14 @@ const OrderScreen = () => {
       });
   }
 
-  const deliverHandler = async () => {
-    await deliverOrder(orderId);
-    refetch();
+  const deliverOrderHandler = async () => {
+    try {
+      await deliverOrder(orderId);
+      refetch();
+      toast.success("Order delivered");
+    } catch (err) {
+      toast.error(err?.data?.message || err.message);
+    }
   };
 
   return isLoading ? (
@@ -219,7 +224,6 @@ const OrderScreen = () => {
                     <Loader />
                   ) : (
                     <div>
-                      {/* THIS BUTTON IS FOR TESTING! REMOVE BEFORE PRODUCTION! */}
                       {/* <Button
                         style={{ marginBottom: '10px' }}
                         onClick={onApproveTest}
@@ -249,7 +253,7 @@ const OrderScreen = () => {
                     <Button
                       type='button'
                       className='btn btn-block'
-                      onClick={deliverHandler}
+                      onClick={deliverOrderHandler}
                     >
                       Mark As Delivered
                     </Button>
