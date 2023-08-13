@@ -40,7 +40,7 @@ const OrderScreen = () => {
 
   useEffect(() => {
     if (!errorPayPal && !loadingPayPal && paypal.clientId) {
-      const loadPaypalScript = async () => {
+      const loadPayPalScript = async () => {
         paypalDispatch({
           type: "resetOptions",
           value: {
@@ -52,20 +52,20 @@ const OrderScreen = () => {
       };
       if (order && !order.isPaid) {
         if (!window.paypal) {
-          loadPaypalScript();
+          loadPayPalScript();
         }
       }
     }
-  }, [errorPayPal, loadingPayPal, order, paypal, paypalDispatch]);
+  }, [order, paypal, paypalDispatch, loadingPayPal, errorPayPal]);
 
   function onApprove(data, actions) {
     return actions.order.capture().then(async function (details) {
       try {
         await payOrder({ orderId, details });
         refetch();
-        toast.success("Order is paid");
+        toast.success("Payment successful");
       } catch (err) {
-        toast.error(err?.data?.message || err.error);
+        toast.error(err?.data?.message || err.message);
       }
     });
   }
