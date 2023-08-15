@@ -86,7 +86,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @desc    Create a new review
 // @route   POST /api/products/:id/reviews
 // @access  Private
-const createProductRevieew = asyncHandler(async (req, res) => {
+const createProductReview = asyncHandler(async (req, res) => {
   const { rating, comment } = req.body;
   const product = await Product.findById(req.params.id);
 
@@ -129,5 +129,5 @@ export {
   createProduct,
   updateProduct,
   deleteProduct,
-  createProductRevieew,
+  createProductReview,
 };
