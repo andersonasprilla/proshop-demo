@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import asyncHandler from "./AsyncHandler.js";
+import asyncHandler from "./asyncHandler.js";
 import User from "../models/userModel.js";
 
 // User must be authenticated
